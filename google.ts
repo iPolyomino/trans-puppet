@@ -1,9 +1,10 @@
 import puppeteer from "puppeteer";
 
 export const GoogleTranslate = async (text: string) => {
-  const browser = await puppeteer.launch({
-    args: ["--no-sandbox", "--disable-setuid-sandbox"],
-  });
+  const LAUNCH_OPTION = process.env.DYNO
+    ? { headless: false }
+    : { args: ["--no-sandbox", "--disable-setuid-sandbox"] };
+  const browser = await puppeteer.launch(LAUNCH_OPTION);
   const page = await browser.newPage();
   await page.goto(
     "https://translate.google.co.jp/#view=home&op=translate&sl=ja&tl=en"
