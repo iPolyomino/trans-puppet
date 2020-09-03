@@ -3,11 +3,8 @@ const puppeteer = require("puppeteer");
 const inputText = "こんにちは";
 
 (async () => {
-  const browser = await puppeteer.launch({
-    headless : false,
-    slowMo : 200,
-    args : [ "--no-sandbox", "--disable-setuid-sandbox" ]
-  });
+  const browser = await puppeteer.launch(
+      {args : [ "--no-sandbox", "--disable-setuid-sandbox" ]});
   const page = await browser.newPage();
   await page.goto(`https://www.bing.com/Translator`);
 
@@ -15,7 +12,7 @@ const inputText = "こんにちは";
   await page.type("#tta_input_ta", inputText);
 
   await page.waitForFunction(
-      'document.getElementById("tta_output_ta").value != ""');
+      'document.getElementById("tta_output_ta").value != " ..."');
 
   const element = await page.$("#tta_output_ta");
   const texts = await element.evaluate(el => el.value);
