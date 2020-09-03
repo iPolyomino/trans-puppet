@@ -4,8 +4,8 @@ const inputText = "こんにちは";
 
 (async () => {
   const browser = await puppeteer.launch({
-    headless : false,
-    slowMo : 200,
+    // headless : false,
+    // slowMo : 200,
     args : [ "--no-sandbox", "--disable-setuid-sandbox" ]
   });
   const page = await browser.newPage();
