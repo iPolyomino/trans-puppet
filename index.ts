@@ -1,8 +1,8 @@
 import express from "express";
 
-import { GoogleTranslate } from "./google";
-import { DeeplTranslate } from "./deepl";
 import { BingTranslate } from "./bing";
+import { DeeplTranslate } from "./deepl";
+import { GoogleTranslate } from "./google";
 import { YandexTranslate } from "./yandex";
 
 const app = express();
@@ -25,8 +25,14 @@ app.get("/google", async (req, res) => {
     res.json({ text: "" });
     return;
   }
-  const result = await GoogleTranslate(text);
-  res.json({ text: result });
+  try {
+    const result = await GoogleTranslate(text);
+    res.json({ text: result });
+    return;
+  } catch (e) {
+    console.error(e);
+  }
+  res.json({ text: "error" });
 });
 
 app.get("/deepl", async (req, res) => {
@@ -35,8 +41,14 @@ app.get("/deepl", async (req, res) => {
     res.json({ text: "" });
     return;
   }
-  const result = await DeeplTranslate(text);
-  res.json({ text: result });
+  try {
+    const result = await DeeplTranslate(text);
+    res.json({ text: result });
+    return;
+  } catch (e) {
+    console.error(e);
+  }
+  res.json({ text: "error" });
 });
 
 app.get("/bing", async (req, res) => {
@@ -45,8 +57,14 @@ app.get("/bing", async (req, res) => {
     res.json({ text: "" });
     return;
   }
-  const result = await BingTranslate(text);
-  res.json({ text: result });
+  try {
+    const result = await BingTranslate(text);
+    res.json({ text: result });
+    return;
+  } catch (e) {
+    console.error(e);
+  }
+  res.json({ text: "error" });
 });
 
 app.get("/yandex", async (req, res) => {
@@ -55,8 +73,14 @@ app.get("/yandex", async (req, res) => {
     res.json({ text: "" });
     return;
   }
-  const result = await YandexTranslate(text);
-  res.json({ text: result });
+  try {
+    const result = await YandexTranslate(text);
+    res.json({ text: result });
+    return;
+  } catch (e) {
+    console.error(e);
+  }
+  res.json({ text: "error" });
 });
 
 app.listen(PORT, () => {
