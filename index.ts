@@ -8,6 +8,12 @@ import { YandexTranslate } from "./yandex";
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+app.all("/", function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  next();
+});
+
 app.get("/", (req, res) => res.json({ text: "Express + TypeScript Server" }));
 
 app.get("/google", async (req, res) => {
@@ -48,11 +54,6 @@ app.get("/yandex", async (req, res) => {
   }
   const result = await YandexTranslate(text);
   res.json({ text: result });
-});
-
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  next();
 });
 
 app.listen(PORT, () => {
