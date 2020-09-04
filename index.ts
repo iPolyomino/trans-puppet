@@ -50,6 +50,11 @@ app.get("/yandex", async (req, res) => {
   res.json({ text: result });
 });
 
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  next();
+});
+
 app.listen(PORT, () => {
   console.log(`⚡️[server]: Server is running at https://localhost:${PORT}`);
 });
