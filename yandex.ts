@@ -9,6 +9,7 @@ export const YandexTranslate = async (text: string) => {
     `https://translate.yandex.com/?lang=ja-en&text=${encodeURI(text)}`
   );
 
+  page.setDefaultTimeout(5000);
   await page.waitForFunction(
     'document.getElementById("translation").textContent != ""'
   );

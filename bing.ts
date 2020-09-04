@@ -10,6 +10,7 @@ export const BingTranslate = async (text: string) => {
   await page.click("#tta_input_ta");
   await page.type("#tta_input_ta", text);
 
+  page.setDefaultTimeout(5000);
   await page.waitForFunction(
     'document.getElementById("tta_output_ta").value != " ..."'
   );

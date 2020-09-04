@@ -10,6 +10,7 @@ export const GoogleTranslate = async (text: string) => {
   );
   await page.type("#source", text);
 
+  page.setDefaultTimeout(5000);
   await page.waitFor(".translation");
 
   const element = await page.$(".translation");
