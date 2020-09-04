@@ -1,6 +1,7 @@
 import express from "express";
-import puppeteer from "puppeteer";
 
+import { BingTranslate } from "./bing";
+import { DeeplTranslate } from "./deepl";
 import { GoogleTranslate } from "./google";
 
 const app = express();
@@ -28,6 +29,38 @@ app.use((req, res, next) => {
 });
 
 app.get("/", (req, res) => res.json(OK("Express + TypeScript Server")));
+
+app.get("/bing", async (req, res) => {
+  const text = req.query.text as string;
+  if (text === "") {
+    res.json(BadRequest);
+    return;
+  }
+  try {
+    const result = await BingTranslate(text);
+    res.json(OK(result));
+    return;
+  } catch (e) {
+    console.error(e);
+    res.json(InternalServerError);
+  }
+});
+
+app.get("/deepl", async (req, res) => {
+  const text = req.query.text as string;
+  if (text === "") {
+    res.json(BadRequest);
+    return;
+  }
+  try {
+    const result = await DeeplTranslate(text);
+    res.json(OK(result));
+    return;
+  } catch (e) {
+    console.error(e);
+    res.json(InternalServerError);
+  }
+});
 
 app.get("/google", async (req, res) => {
   const text = req.query.text as string;
