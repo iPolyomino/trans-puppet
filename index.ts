@@ -1,14 +1,24 @@
 import express from "express";
+import puppeteer from "puppeteer";
 
-import { BingTranslate } from "./bing";
-import { DeeplTranslate } from "./deepl";
 import { GoogleTranslate } from "./google";
-import { YandexTranslate } from "./yandex";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(function (req, res, next) {
+const OK = (text: string) => {
+  return { code: 200, text: text };
+};
+const BadRequest = {
+  code: 400,
+  text: "Bad Request",
+};
+const InternalServerError = {
+  code: 500,
+  text: "Internal Server Error",
+};
+
+app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
   res.header(
     "Access-Control-Allow-Headers",
@@ -17,71 +27,25 @@ app.use(function (req, res, next) {
   next();
 });
 
-app.get("/", (req, res) => res.json({ text: "Express + TypeScript Server" }));
+app.get("/", (req, res) => res.json(OK("Express + TypeScript Server")));
 
 app.get("/google", async (req, res) => {
   const text = req.query.text as string;
   if (text === "") {
-    res.json({ text: "" });
+    res.json(BadRequest);
     return;
   }
   try {
     const result = await GoogleTranslate(text);
-    res.json({ text: result });
+    res.json(OK(result));
     return;
   } catch (e) {
     console.error(e);
+    res.json(InternalServerError);
   }
-  res.json({ text: "error" });
 });
 
-app.get("/deepl", async (req, res) => {
-  const text = req.query.text as string;
-  if (text === "") {
-    res.json({ text: "" });
-    return;
-  }
-  try {
-    const result = await DeeplTranslate(text);
-    res.json({ text: result });
-    return;
-  } catch (e) {
-    console.error(e);
-  }
-  res.json({ text: "error" });
-});
-
-app.get("/bing", async (req, res) => {
-  const text = req.query.text as string;
-  if (text === "") {
-    res.json({ text: "" });
-    return;
-  }
-  try {
-    const result = await BingTranslate(text);
-    res.json({ text: result });
-    return;
-  } catch (e) {
-    console.error(e);
-  }
-  res.json({ text: "error" });
-});
-
-app.get("/yandex", async (req, res) => {
-  const text = req.query.text as string;
-  if (text === "") {
-    res.json({ text: "" });
-    return;
-  }
-  try {
-    const result = await YandexTranslate(text);
-    res.json({ text: result });
-    return;
-  } catch (e) {
-    console.error(e);
-  }
-  res.json({ text: "error" });
-});
+app.get("/*", (req, res) => res.json(BadRequest));
 
 app.listen(PORT, () => {
   console.log(`⚡️[server]: Server is running at https://localhost:${PORT}`);
