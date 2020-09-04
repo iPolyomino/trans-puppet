@@ -10,8 +10,11 @@ export const GoogleTranslate = async (text: string) => {
   );
   await page.type("#source", text);
 
-  page.setDefaultTimeout(5000);
-  await page.waitFor(".translation");
+  try {
+    await page.waitFor(".translation", { timeout: 5000 });
+  } catch (e) {
+    return "Internal Server Error";
+  }
 
   const element = await page.$(".translation");
   if (element == null) {

@@ -10,10 +10,14 @@ export const BingTranslate = async (text: string) => {
   await page.click("#tta_input_ta");
   await page.type("#tta_input_ta", text);
 
-  page.setDefaultTimeout(5000);
-  await page.waitForFunction(
-    'document.getElementById("tta_output_ta").value != " ..."'
-  );
+  try {
+    await page.waitForFunction(
+      'document.getElementById("tta_output_ta").value != " ..."',
+      { timeout: 5000 }
+    );
+  } catch (e) {
+    return "Internal Server Error";
+  }
 
   const element = await page.$("#tta_output_ta");
   if (element == null) {

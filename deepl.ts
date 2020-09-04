@@ -7,10 +7,14 @@ export const DeeplTranslate = async (text: string) => {
   const page = await browser.newPage();
   await page.goto(`https://www.deepl.com/translator#ja/en/${encodeURI(text)}`);
 
-  page.setDefaultTimeout(5000);
-  await page.waitForFunction(
-    'document.getElementsByClassName("lmt__target_textarea")[0].value != ""'
-  );
+  try {
+    await page.waitForFunction(
+      'document.getElementsByClassName("lmt__target_textarea")[0].value != ""',
+      { timeout: 5000 }
+    );
+  } catch (e) {
+    return "Internal Server Error";
+  }
 
   const element = await page.$(".lmt__target_textarea");
   if (element == null) {

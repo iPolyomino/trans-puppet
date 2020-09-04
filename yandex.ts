@@ -9,10 +9,14 @@ export const YandexTranslate = async (text: string) => {
     `https://translate.yandex.com/?lang=ja-en&text=${encodeURI(text)}`
   );
 
-  page.setDefaultTimeout(5000);
-  await page.waitForFunction(
-    'document.getElementById("translation").textContent != ""'
-  );
+  try {
+    await page.waitForFunction(
+      'document.getElementById("translation").textContent != ""',
+      { timeout: 5000 }
+    );
+  } catch (e) {
+    return "Internal Server Error";
+  }
 
   const element = await page.$("#translation");
 
